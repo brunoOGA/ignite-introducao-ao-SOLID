@@ -6,7 +6,21 @@ class ListAllUsersController {
   constructor(private listAllUsersUseCase: ListAllUsersUseCase) {}
 
   handle(request: Request, response: Response): Response {
-    // Complete aqui
+    try {
+      const { user_id } = request.headers;
+
+      if (!user_id) throw new Error("Erro");
+
+      if (Array.isArray(user_id)) {
+        throw new Error("Erro");
+      }
+
+      const list = this.listAllUsersUseCase.execute({ user_id });
+
+      return response.json(list);
+    } catch {
+      return response.status(400).json({ error: "Erro" });
+    }
   }
 }
 
